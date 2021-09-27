@@ -3,5 +3,11 @@
     padding: 0;
 }
 body {
-    background: red;
+    background: rgb(177, 159, 159);
+}
+#new-note{
+    text-align: center;
+    .form-group{
+        margin: 0.5rem 0;
+    }
 }

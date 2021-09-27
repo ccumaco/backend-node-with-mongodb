@@ -4,6 +4,14 @@
 }
 
 body {
-  background: red;
+  background: #b19f9f;
+}
+
+#new-note {
+  text-align: center;
+}
+
+#new-note .form-group {
+  margin: 0.5rem 0;
 }
 /*# sourceMappingURL=main.css.map */
