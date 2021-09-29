@@ -6,6 +6,7 @@ const Product = require('../models/Product')
 
 router.post('/products/new-product', async (req,res) => {
     const { image , description, active,name,stok,price} = req.body
+    console.log(req.body,'req');
     const errors = []
     if (!image || !description || !active || !name || !stok || !price) {
         errors.push({alert: 'falta llenar los campos'})

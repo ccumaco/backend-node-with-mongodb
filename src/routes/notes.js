@@ -9,6 +9,7 @@ router.get('/notes/add', (req,res) => {
 
 router.post('/notes/new-note', async (req,res) => {
     const { title , description} = req.body
+    console.log(req.body,'req');
     const errors = []
     if (!title) {
         errors.push({text: 'inserte un titulo'})
