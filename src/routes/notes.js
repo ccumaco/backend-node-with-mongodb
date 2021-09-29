@@ -32,6 +32,7 @@ router.post('/notes/new-note', async (req,res) => {
 
 router.get('/notes', async (req, res) => {
     const notes = await Note.find().lean()
-    res.render('notes/all-notes', { notes })
+    // res.render('notes/all-notes', { notes })
+    res.send({notes})
 })
 module.exports = router
