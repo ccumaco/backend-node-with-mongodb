@@ -22,6 +22,6 @@ router.post('/products/new-product', async (req,res) => {
 
 router.get('/products', async (req, res) => {
     const products = await Product.find().lean()
-    res.send('vista productos')
+    res.send(products)
 })
 module.exports = router

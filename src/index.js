@@ -4,11 +4,13 @@ const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const session = require('express-session')
 const body_parser = require('body-parser');
+var cors = require('cors');
 //Initializations
 const app = express()
 require('./database')
 //settings
 
+app.use(cors());
 app.set('port', process.env.PORT || 3000)
 app.set('views',path.join(__dirname,'views'))
 app.engine('.hbs',exphbs({
