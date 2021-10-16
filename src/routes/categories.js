@@ -1,5 +1,5 @@
 const express = require('express')
-const router = express()
+const router = express.Router()
 const body_parser = require('body-parser');
 var jsonParser = body_parser.json()
 const Categorie = require('../models/Categorie')

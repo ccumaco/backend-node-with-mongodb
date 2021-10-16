@@ -1,5 +1,5 @@
 const express = require('express')
-const router = express()
+const router = express.Router()
 const body_parser = require('body-parser');
 var jsonParser = body_parser.json()
 const Product = require('../models/Product')
