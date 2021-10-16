@@ -18,6 +18,7 @@ app.set('view engine', '.hbs')
 //global variables
 
 //routes
+console.log('process.env.MONGODB_URI', process.env.MONGODB_URI);
 
 app.use(require('./routes/categories'))
 app.use(require('./routes/products'))
