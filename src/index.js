@@ -1,6 +1,13 @@
-const express = require('express')
-const path = require('path')
-var cors = require('cors');
+
+var express = require("express"),
+    mongoose = require("mongoose"),
+    passport = require("passport"),
+    bodyParser = require("body-parser"),
+    LocalStrategy = require("passport-local"),
+    passportLocalMongoose = require("passport-local-mongoose"),
+    express = require('express'),
+    cors = require('cors')
+
 //Initializations
 const app = express()
 require('./database')
@@ -8,9 +15,9 @@ require('./database')
 
 app.use(cors());
 app.set('port', process.env.PORT || 3000)
-app.set('views',path.join(__dirname,'views'))
 
-app.set('view engine', '.hbs')
+
+// app.set('view engine', '.hbs')
 
 //middlewares
 
@@ -18,16 +25,10 @@ app.set('view engine', '.hbs')
 //global variables
 
 //routes
-console.log('process.env.MONGODB_URI', process.env.MONGODB_URI);
 
 app.use(require('./routes/categories'))
 app.use(require('./routes/products'))
-app.use(require('./routes/index'))
 
-//static files
-
-
-app.use(express.static(path.join(__dirname + '/public')))
 //server is listening
 
 app.listen(app.get('port'), () => {
