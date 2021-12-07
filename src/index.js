@@ -1,36 +1,40 @@
 
-var express = require("express"),
-    mongoose = require("mongoose"),
-    passport = require("passport"),
-    bodyParser = require("body-parser"),
-    LocalStrategy = require("passport-local"),
-    passportLocalMongoose = require("passport-local-mongoose"),
-    express = require('express'),
-    cors = require('cors')
+const express = require("express");
+const cors = require('cors');
+const morgan = require("morgan");
+const passport = require("passport");
+const session = require("express-session");
 
 //Initializations
 const app = express()
 require('./database')
-//settings
+require('./passport/local-auth')
 
+
+//settings
 app.use(cors());
 app.set('port', process.env.PORT || 3000)
 
 
-// app.set('view engine', '.hbs')
-
 //middlewares
+app.use(session({
+    secret: 'mysecretapp',
+    resave: false,
+    saveUninitialized: false
+}))
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(morgan('dev'))
 
 //global variables
 
 //routes
-
 app.use(require('./routes/categories'))
 app.use(require('./routes/products'))
+app.use(require('./routes/login'))
 
 //server is listening
-
 app.listen(app.get('port'), () => {
     console.log('server on port', app.get('port'));
 })
