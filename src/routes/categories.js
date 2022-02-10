@@ -33,9 +33,9 @@ router.get('/categories', async (req, res) => {
     res.json(categories)
     
 })
-router.get('/categories/:id', async (req, res) => {
-    const categorie = await Categorie.find({_id: req.params.id}).lean()
-    res.send(categorie[0])
+router.get('/categories/:name', async (req, res) => {
+    const categorie = await Categorie.find({name: req.params.name}).lean()
+    res.send(categorie[0].products)
 })
 
 router.post('/categories/status/:name', jsonParser, async (req, res) => {
