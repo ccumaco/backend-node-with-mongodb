@@ -6,16 +6,25 @@ const Categorie = require('../models/Categorie')
 
 
 router.post('/categories/new-categorie', jsonParser,  async (req,res) => {
-    const { image , description, active,name,stok,price} = req.body
+    const { name, image, description, products, active, promotion } = req.body
+    const categoriExist = await Categorie.find({name: name}).lean()
     const errors = []
-    if (!description || !name) {
-        errors.push({alert: 'falta llenar los campos'})
+    if (!name) {
+        errors.push({name: 'Por favor llene el campo de nombre'})
+    } 
+    if(categoriExist.length > 0) {
+        errors.push({exist: 'Ya existe una categoría con ese nombre'})
     }
+    if (!description) {
+        errors.push({description: 'Por favor llene el campo de descripcion'})
+    }
+    
     if (errors.length > 0) {
         res.send(errors)
     } else {
-        const newCategorie = new Categorie({image , description, active,name,stok,price})
+        const newCategorie = new Categorie({name, image, description, products, active, promotion})
         await newCategorie.save();
+        await res.send({success: 'se creo la categoria con exito'})
     }
 })
 

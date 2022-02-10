@@ -16,6 +16,7 @@ router.post('/products/new-product', jsonParser,  async (req,res) => {
     } else {
         const newProduct = new Product({image , description, active,name,stok,price})
         await newProduct.save();
+        res.send('se creo el producto con exito')
     }
 })
 
@@ -24,6 +25,7 @@ router.get('/products', async (req, res) => {
     res.json(products)
     
 })
+
 router.get('/products/:id', async (req, res) => {
     const product = await Product.find({_id: req.params.id}).lean()
     res.send(product[0])
