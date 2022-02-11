@@ -10,6 +10,7 @@ router.post('/products/new-product', jsonParser,  async (req,res) => {
     const productExist = await Product.find({name: name}).lean()
     const allProducts = await Product.find().lean()
     const errors = []
+    _id = 0
     //asigna auto incremental a los productos en el id
     if(productExist.length > 0) {
         errors.push({alert: 'Ya existe un producto con ese nombre'})
