@@ -8,7 +8,7 @@ const session = require("express-session");
 //Initializations
 const app = express()
 require('./database')
-require('./passport/local-auth')
+// require('./passport/local-auth')
 
 
 //settings
