@@ -30,10 +30,11 @@ router.post('/products/new-product', jsonParser,  async (req,res) => {
     }
 })
 
-router.get('/products', async (req, res) => {
+router.get('/products/commerce/:name', async (req, res) => {
+    let { name } = req.params
+    console.log(name);
     const products = await Product.find().lean()
     res.json(products)
-    
 })
 
 
