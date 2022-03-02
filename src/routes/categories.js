@@ -1,59 +1,65 @@
 const express = require('express')
 const router = express.Router()
-const body_parser = require('body-parser');
-var jsonParser = body_parser.json()
-const Categorie = require('../models/Categorie')
+const Commerce = require('../models/Commerce')
+
+var mongoObjectId = function () {
+    var timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+    return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
+        return (Math.random() * 16 | 0).toString(16);
+    }).toLowerCase();
+};
 
 
-router.post('/categories/new-categorie', jsonParser,  async (req,res) => {
-    const { name, image, description, products, active, promotion } = req.body
-    const categoriExist = await Categorie.find({name: name}).lean()
-    const errors = []
-    if (!name) {
-        errors.push({name: 'Por favor llene el campo de nombre'})
-    } 
-    if(categoriExist.length > 0) {
-        errors.push({exist: 'Ya existe una categoría con ese nombre'})
-    }
-    if (!description) {
-        errors.push({description: 'Por favor llene el campo de descripcion'})
-    }
+// crear categorias para el comercio
+router.post('/categories/new-categorie/:commerce',   async (req,res) => {
     
-    if (errors.length > 0) {
-        res.send(errors)
+    try{
+        if (Commerce.find({name: req.params.commerce})) {
+            let comercio = await Commerce.findOne({name: req.params.commerce}).lean()
+            req.body.id = mongoObjectId()
+            comercio.categories.push(req.body)
+            await Commerce.findOneAndUpdate({name: req.params.commerce}, comercio)
+            
+            res.send('se a creado la categoria')
+        } else {
+            console.log('no se encontrol', req.params.commerce);
+        }
+    } catch(error){
+        res.send(error)
+    }
+})
+
+
+
+// obtener todos las categorias del comercio
+router.get('/categories/commerce/:name', async (req, res) => {
+    console.log(req.params.name);
+    const commerce = await Commerce.findOne({name: req.params.name}).lean()
+    if (commerce) {
+        res.send(commerce.categories)
     } else {
-        const newCategorie = new Categorie({name, image, description, products, active, promotion})
-        await newCategorie.save();
-        await res.send({success: 'se creo la categoria con exito'})
+        res.send('no hay categorias')
     }
 })
 
-router.get('/categories', async (req, res) => {
-    const categories = await Categorie.find().lean()
-    res.json(categories)
-    
-})
-router.get('/categories/:name', async (req, res) => {
-    const categorie = await Categorie.find({name: req.params.name}).lean()
-    res.send(categorie[0].products)
-})
 
-router.post('/categories/status/:name', jsonParser, async (req, res) => {
-    const { name } = req.params
-    await Categorie.updateOne({name: name}, req.body)
-    console.log(req.body);
-    res.send('updated' + req.body);
-  });
 
-router.post('/categories/:id', jsonParser, async (req, res) => {
-    const { id } = req.params
-    await Categorie.updateOne({_id: id}, req.body)
-    res.send('updated' + req.body);
-  });
-router.get('/delete/categories/:id', async (req, res, next) => {
-    const { id } = req.params;
-    await Categorie.deleteOne({_id: id});
-    res.send('delete' + req.body)
-});
+// editar categoria del comercio
+router.put('/category-update/:commerce', async (req, res) => {
+    try {
+        let { commerce } = req.params
+        let comercio = await Commerce.findOne({name: commerce}).lean()
+        await comercio.categories.forEach((element, index) => {
+            if (element.id == req.body.id) {
+                comercio.categories[index] = req.body
+                console.log(comercio.categories[index]);
+            }
+        });
+        await Commerce.findOneAndUpdate({name: commerce}, comercio)
+        res.send('comercio actualizado')
+    } catch (error) {
+        res.send('No existe el comercio')
+    }
+})
 
 module.exports = router

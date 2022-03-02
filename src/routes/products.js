@@ -1,24 +1,18 @@
 const express = require('express')
 const router = express.Router()
 const Product = require('../models/Product');
+const Commerce = require('../models/Commerce');
 
 
 //crear producto
 router.post('/products/new-product', async (req,res) => {
     let { image , description, active,name,stok,price} = req.body
     const productExist = await Product.find({name: name}).lean()
-    // const allProducts = await Product.find().lean()
     const errors = []
-    // _id = 0
-    //asigna auto incremental a los productos en el id
     if(productExist.length > 0) {
         console.log('entr1');
         errors.push({alert: 'Ya existe un producto con ese nombre'})
     }
-    // if(allProducts.length > 0) {
-    //     console.log('entro2');
-    //     _id = _id + allProducts.length
-    // }
     if (!description || !name) {
         console.log('entro3');
         errors.push({alert: 'falta llenar los campos'})
@@ -35,11 +29,10 @@ router.post('/products/new-product', async (req,res) => {
 
 
 //obtener productos del comercio
-router.get('/products/commerce/:name', async (req, res) => {
-    let { name } = req.params
-    console.log(name);
-    const products = await Product.find().lean()
-    res.json(products)
+router.get('/products/commerce/:id', async (req, res) => {
+    let { id } = req.params
+    const category = await Commerce.findOne({id: id}).lean()
+    res.json(category.categories)
 })
 
 //obtener producto en espesifico

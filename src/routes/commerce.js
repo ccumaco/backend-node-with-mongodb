@@ -51,8 +51,8 @@ router.get('/commerces', async (req, res) => {
 router.delete('/commerce-delete/:id', async (req, res) => {
     try {
         let { id } = req.params
-        const commerce = await Commerce.findByIdAndDelete(id)
-        res.send(commerce)
+        await Commerce.findByIdAndDelete(id)
+        res.send('comercio eliminado')
     } catch (error) {
         res.send('hay un error con el parametro enviado' + error)
     }
@@ -63,8 +63,8 @@ router.delete('/commerce-delete/:id', async (req, res) => {
 router.put('/commerce-update/:id', async (req, res) => {
     try {
         let { id } = req.params
-        const commerce = await Commerce.findByIdAndUpdate(id, req.body)
-        res.send(commerce)
+        await Commerce.findByIdAndUpdate(id, req.body)
+        res.send('comercio actualizado')
     } catch (error) {
         res.send('No existe el comercio')
     }
