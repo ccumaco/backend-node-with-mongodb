@@ -9,6 +9,16 @@ var mongoObjectId = function () {
     }).toLowerCase();
 };
 
+router.get('/categories', async (req, res) => {
+    try {
+        const categories = await Commerce.find().distinct('categories').lean()
+        res.send(categories)
+    } catch (error) {
+        res.send('hay un error con el parametro enviado')
+    }
+})
+
+
 
 // crear categorias para el comercio
 router.post('/categories/new-categorie/:commerce',   async (req,res) => {

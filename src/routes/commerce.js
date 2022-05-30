@@ -5,7 +5,7 @@ const Commerce = require('../models/Commerce')
 
 // crear comercio
 router.post('/commerce/new-commerce', async (req, res) => {
-    let { image , description, active,name,categories,promotion} = req.body
+    let { image , description, active,name} = req.body
     const commerceExist = await Commerce.find({name: name}).lean()
     const errors = []
     try{
@@ -16,7 +16,7 @@ router.post('/commerce/new-commerce', async (req, res) => {
         if (errors.length > 0) {
             res.send(errors)
         } else {
-            const newCommerce = new Commerce({image , description, active,name,categories,promotion})
+            const newCommerce = new Commerce({image , description, active,name})
             await newCommerce.save();
             res.send('se creo el comercio con exito')
         }
